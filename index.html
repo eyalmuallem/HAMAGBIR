@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> רישום מפרט ״חברת המגביר״ </title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+    <style>
+    .logo-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.logo-container img {
+    height: 60px;
+}
+
+.logo-center {
+    margin: 0 auto;
+    display: block;
+    .logo-left {
+    order: 3; /* לוגו בצד שמאל */
+}
+}
+
+        body {
+            font-family: Arial, sans-serif;
+            direction: rtl;
+            text-align: right;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        
+        .container {
+            max-width: 600px;
+            background: WHITE;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: auto;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: white;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        .remove-btn {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            .logo-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+      <div class="logo-container">
+    <img src="https://i.postimg.cc/0jdRxfgb/PHOTO-2025-03-07-21-08-35.jpg" alt="לוגו צד ימין">
+    
+   </a>
+    
+        <img src="https://i.postimg.cc/cHCNRY8z/PHOTO-2025-03-07-21-09-09.jpg" alt="לוגו צד שמאל" class="logo-left">
+    </a>
+</div>
+
+        <h2>רישום ציוד להופעה</h2>
+        <label>שם הסאונדמן:</label>
+        <input type="text" id="soundman_name" placeholder="הכנס שם">
+             
+        <label>הרכב יוצא:</label>
+<input type="text" id="band_name" placeholder="הכנס את שם ההרכב">
+
+        <label>בחר ציוד:</label>
+        <select id="equipment_select">
+            <option value="">בחר ציוד...</option>
+        </select>
+        <button onclick="addEquipment()">הוסף</button>
+        <table id="equipment_table">
+            <thead>
+                <tr>
+                    <th>מק"ט</th>
+                    <th>מוצר</th>
+                    <th>הסר</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <button onclick="exportToCSV()">ייצוא ל-CSV</button>
+        <button onclick="exportToExcel()">ייצוא לאקסל</button>
+
+    </div>
+    <script>
+        const equipmentList = [
+           { code: "0001", name: "XLR 3m", quantity: 2, category: "כבלים וחיבורים" },
+            { code: "0002", name: "XLR 5m", quantity: 5, category: "כבלים וחיבורים" },
+            { code: "0003", name: "XLR 10m", quantity: 13, category: "כבלים וחיבורים" },
+            { code: "0004", name: "PL to PL 15m", quantity: 1, category: "כבלים וחיבורים" },
+            { code: "0005", name: "PL קלידים סטריאו", quantity: 1, category: "כבלים וחיבורים" },
+            { code: "0006", name: "כבל רשת 30m", quantity: 1, category: "כבלים וחיבורים" },
+            { code: "0007", name: "כבל רשת 20m", quantity: 1, category: "כבלים וחיבורים" },
+            { code: "0008", name: "כבל רשת 10m", quantity: 1, category: "כבלים וחיבורים" },
+            { code: "0009", name: "מולטי 16 IO", quantity: 1, category: "כבלים וחיבורים" },
+            { code: "0010", name: "צמה 8", quantity: 1, category: "כבלים וחיבורים" },
+            { code: "0011", name: "סטנד בום", quantity: 3, category: "סטנדים ומתקנים" },
+            { code: "0012", name: "סטנד בום נתלה", quantity: 1, category: "סטנדים ומתקנים" },
+            { code: "0013", name: "סטנד רמקול", quantity: 2, category: "סטנדים ומתקנים" },
+            { code: "0014", name: "TOPs TAG UK 10", quantity: 2, category: "רמקולים ומוניטורים" },
+            { code: "0015", name: "SUBs TAG UK 15", quantity: 2, category: "רמקולים ומוניטורים" },
+            { code: "0016", name: "MON Protech 12", quantity: 4, category: "רמקולים ומוניטורים" },
+            { code: "0017", name: "BD", quantity: 1, category: "מיקרופונים" },
+            { code: "0018", name: "TOMs", quantity: 3, category: "מיקרופונים" },
+            { code: "0019", name: "Rode M5 Pair", quantity: 2, category: "מיקרופונים" },
+            { code: "0020", name: "AKG P5", quantity: 3, category: "מיקרופונים" },
+            { code: "0021", name: "Handy Blue", quantity: 2, category: "מיקרופונים" },
+            { code: "0022", name: "General Handy", quantity: 2, category: "מיקרופונים" },
+            { code: "0023", name: "Measurement Mic", quantity: 1, category: "מיקרופונים" },
+            { code: "0024", name: "Behringer XR18", quantity: 1, category: "מיקסרים" },
+            { code: "0025", name: "Presonus CS18AI", quantity: 1, category: "מיקסרים" },
+            { code: "0026", name: "Presonus RM32AI", quantity: 1, category: "מיקסרים" },
+            { code: "0027", name: "Behringer Analog 16", quantity: 1, category: "מיקסרים" },
+            { code: "0028", name: "MAC MINI", quantity: 1, category: "מחשוב" },
+            { code: "0029", name: "MACBOOK", quantity: 1, category: "מחשוב" },
+            { code: "0030", name: "RAUTER", quantity: 1, category: "מחשוב" }
+
+        ];
+        
+        const select = document.getElementById("equipment_select");
+        equipmentList.forEach(item => {
+            let option = document.createElement("option");
+            option.value = item.code;
+            option.textContent = `${item.code} - ${item.name}`;
+            select.appendChild(option);
+        });
+
+function addEquipment() {
+    let selectedCode = select.value;
+    if (!selectedCode) return;
+    
+    let table = document.getElementById("equipment_table").getElementsByTagName("tbody")[0];
+    
+    // בדיקה אם המק"ט כבר קיים בטבלה
+    let existingRows = Array.from(table.getElementsByTagName("tr"));
+    let alreadyExists = existingRows.some(row => row.cells[0]?.innerText === selectedCode);
+    
+    if (alreadyExists) {
+        alert("הפריט כבר נוסף לרשימה!");
+        return;
+    }
+
+    let selectedItem = equipmentList.find(item => item.code === selectedCode);
+    let row = table.insertRow();
+    let cell1 = row.insertCell(0);
+    let cell2 = row.insertCell(1);
+    let cell3 = row.insertCell(2);
+    
+    cell1.textContent = selectedItem.code;
+    cell2.textContent = selectedItem.name;
+    
+    let deleteButton = document.createElement("button");
+    deleteButton.textContent = "הסר";
+    deleteButton.className = "remove-btn";
+    deleteButton.onclick = function() { row.remove(); };
+    
+    cell3.appendChild(deleteButton);
+
+        }
+
+        function exportToCSV() {
+            let table = document.getElementById("equipment_table");
+            let rows = Array.from(table.rows).slice(1);
+            let soundmanName = document.getElementById("soundman_name").value;
+            let bandName = document.getElementById("band_name").value;
+
+            let date = new Date().toISOString().split('T')[0];
+           let csvContent = `שם הסאונדמן,מספר אישי,הרכב יוצא\n${soundmanName},${soundmanId},${bandName}\n\nמק"ט,מוצר\n`;
+
+            let blob = new Blob([csvContent], { type: "text/csv" });
+            let link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `רשימת ציוד:${date}.csv`;
+            link.click();
+        }
+    </script>
+    <script>
+    function exportToExcel() {
+        let table = document.getElementById("equipment_table");
+        let rows = Array.from(table.rows).slice(1); // מתעלם מהכותרת
+
+        let soundmanName = document.getElementById("soundman_name").value || "לא צויין";
+        let bandName = document.getElementById("band_name").value || "לא צויין";
+
+
+           
+       let data = [
+    ["שם הסאונדמן", "הרכב יוצא"],
+    [soundmanName,bandName],
+    [],
+    ["מק\"ט", "מוצר"]
+];
+
+        
+
+        rows.forEach(row => {
+            let cells = Array.from(row.cells);
+            data.push([cells[0].innerText, cells[1].innerText]); // מוסיף רק את מק"ט והמוצר (ללא "הסר")
+        });
+
+        // יצירת גיליון עבודה
+        let wb = XLSX.utils.book_new();
+        let ws = XLSX.utils.aoa_to_sheet(data);
+        XLSX.utils.book_append_sheet(wb, ws, "רשימת ציוד");
+
+        // הורדת הקובץ
+        let date = new Date().toISOString().split('T')[0];
+        XLSX.writeFile(wb, `רשימת_ציוד_${date}.xlsx`);
+    }
+</script>
+
+</body>
+</html>
